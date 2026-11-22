@@ -32,6 +32,12 @@ public final class TargetActions {
 
     private TargetActions() { }
 
+    /** Полёт на элитрах: сверяем позу по имени — метод и константа переименовывались между версиями. */
+    private static boolean isGliding(LivingEntity t) {
+        String pose = t.getPose().name();
+        return pose.equals("GLIDING") || pose.equals("FALL_FLYING");
+    }
+
     private static Act action(LivingEntity t) {
         boolean ru = LANG.mode == 0;
         if (t.isUsingItem()) {
@@ -62,7 +68,7 @@ public final class TargetActions {
             return new Act(ru ? "Атакует" : "Attacking", 0xFFAA00, t.getMainHandStack(), "");
         }
         if (MOVES.bool) {
-            if (t.isFallFlying()) return new Act(ru ? "Летит на элитрах" : "Gliding", 0x55E0FF, ItemStack.EMPTY, "");
+            if (isGliding(t)) return new Act(ru ? "Летит на элитрах" : "Gliding", 0x55E0FF, ItemStack.EMPTY, "");
             if (t.isSprinting()) return new Act(ru ? "Бежит" : "Sprinting", 0xFFFFFF, ItemStack.EMPTY, "");
             if (t.isSneaking()) return new Act(ru ? "Крадётся" : "Sneaking", 0xAAAAAA, ItemStack.EMPTY, "");
         }
